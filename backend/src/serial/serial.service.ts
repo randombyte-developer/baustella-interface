@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import * as SerialPort2 from 'serialport';
+import { Button } from './button';
+import { DataProvider } from './data-provider';
 import { Display } from './display';
 
 const Delimiter = require("@serialport/parser-delimiter");
@@ -11,6 +13,8 @@ export class SerialService {
 
     private testNumber = 0;
 
+    private dataProviders: DataProvider[] = [];
+
     constructor() {
         this.port = new SerialPort2("/dev/ttyUSB0", { baudRate: 9600 }, function (error) {
             if (error) {
@@ -21,33 +25,21 @@ export class SerialService {
         const parser = this.port.pipe(new Delimiter({ delimiter: ";" }));
         parser.on("data", (data: Buffer) => {
             console.log("Data: " + data);
-
-            const match = data.toString().match("b(\\d):([01])");
-            if (!match) return;
-
-            this.onButton(parseInt(match[1]), parseInt(match[2]) === 1);
+            this.dataProviders.forEach(provider => provider.offerData(data.toString()));
         });
-    }
 
-    private onButton(number: number, pressed: boolean) {
-        switch (number) {
-            case 1:
-                if (pressed) {
-                    this.testNumber++;
-                    this.updateDisplay();
-                }
-
-                break;
-            default:
-                break;
-        }
+        this.dataProviders = [
+            new Button(1, () => {
+                this.testNumber++;
+                this.updateDisplay();
+            })
+        ]
     }
 
     private updateDisplay() {
-        const a = Display.encodeNumber(this.testNumber);
-        let data = "d1:".split("").map(char => char.charCodeAt(0));
-        data.push(...a);
-        data.push(";".charCodeAt(0));
-        this.port.write(data)
+        let tag = "d1:".split("").map(char => char.charCodeAt(0));
+        const text = Display.encodeNumber(this.testNumber);
+
+        this.port.write([...tag, ...text, ";".charCodeAt(0)])
     }
 }
