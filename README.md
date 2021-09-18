@@ -15,3 +15,9 @@ The Arduino Nano and Raspberry Zero communicate in both directions over a serial
 | Button 1 | `b1:<0\|1>` | `b1:1` |
 | Button 2 | `b2:<0\|1>` | `b2:1` |
 | Button 3 | `b3:<0\|1>` | `b3:1` |
+
+### Raspberry -> Arduino
+| Value name | Schema | Example |
+| --- | --- | --- |
+| Display | `d1:<char[]>;` | `d1:TEXT
+;` |
