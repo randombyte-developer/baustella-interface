@@ -19,5 +19,4 @@ The Arduino Nano and Raspberry Zero communicate in both directions over a serial
 ### Raspberry -> Arduino
 | Value name | Schema | Example |
 | --- | --- | --- |
-| Display | `d1:<char[]>;` | `d1:TEXT
-;` |
+| Display | `d1:<char[]>;` | `d1:TEXT;` |
