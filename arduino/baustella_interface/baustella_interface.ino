@@ -1,5 +1,7 @@
 #include <HX711.h>
 #include <TM1637Display.h>
+#include <DallasTemperature.h>
+#include <OneWire.h>
 
 #define WEIGHT1_DATA_PIN 2
 #define WEIGHT1_CLOCK_PIN 3
@@ -14,8 +16,15 @@
 #define BUTTON2_PIN 9
 #define BUTTON3_PIN 10
 
+#define ONE_WIRE_BUS_PIN 11
+
+#define MAX_TEMPERATURE_SENSORS 1
+
 HX711 weight1;
 HX711 weight2;
+
+OneWire oneWire(ONE_WIRE_BUS_PIN);
+DallasTemperature sensors(&oneWire);
 
 TM1637Display display(DISPLAY_CLOCK_PIN, DISPLAY_DATA_PIN);
 
@@ -36,6 +45,10 @@ void setup() {
   setupButton(BUTTON1_PIN);
   setupButton(BUTTON2_PIN);
   setupButton(BUTTON3_PIN);
+
+  sensors.setWaitForConversion(false);
+  sensors.begin();
+  sensors.requestTemperatures();
 }
 
 void loop() {
@@ -43,10 +56,12 @@ void loop() {
   readWeightIfReady(weight2, "w2");
 
   updateDisplay();
-  
+
   readButton(BUTTON1_PIN, "b1");
   readButton(BUTTON2_PIN, "b2");
   readButton(BUTTON3_PIN, "b3");
+
+  readTemperatures();
 }
 
 void readWeightIfReady(HX711 weight, const char* tag) {
@@ -69,6 +84,22 @@ void readButton(char pin, const char* tag) {
   Serial.print(":");
   Serial.print(pressed ? 1 : 0);
   Serial.print(";");
+}
+
+void readTemperatures() {
+  if (!sensors.isConversionComplete()) return; // TODO: only checks for the first sensor on the wire
+
+  for (int i = 0; i < MAX_TEMPERATURE_SENSORS; i++) {
+    float temperature = sensors.getTempCByIndex(i);
+
+    Serial.print("t");
+    Serial.print(i + 1);
+    Serial.print(":");
+    Serial.print(temperature);
+    Serial.print(";");  
+  }
+  
+  sensors.requestTemperatures();
 }
 
 void updateDisplay() {
