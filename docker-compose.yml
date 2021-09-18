@@ -1,0 +1,7 @@
+version: "3.3"
+services:
+  backend:
+    privileged: true # to be able to read/write all serial devices
+    build: ./backend/
+    ports:
+      - "3000:3000"
