@@ -2,6 +2,7 @@
 
 ## Arduino libraries
 - https://github.com/bogde/HX711
+- https://github.com/avishorp/TM1637
 
 ## Serial protocol
 The Arduino Nano and Raspberry Zero communicate in both directions over a serial port via USB.
