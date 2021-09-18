@@ -20,4 +20,6 @@ The Arduino Nano and Raspberry Zero communicate in both directions over a serial
 ### Raspberry -> Arduino
 | Value name | Schema | Example |
 | --- | --- | --- |
-| Display | `d1:<char[]>;` | `d1:TEXT;` |
+| Display | `d1:<char[]>;` | `d1:XXXX;` |
+
+The chars are to be set like described [here](https://github.com/avishorp/TM1637/blob/3cca19607013c49f6708b7f492765fea835431ca/TM1637Display.cpp#L31-L38).

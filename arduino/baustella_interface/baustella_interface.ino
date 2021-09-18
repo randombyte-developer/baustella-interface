@@ -10,6 +10,10 @@
 #define DISPLAY_DATA_PIN 6
 #define DISPLAY_CLOCK_PIN 7
 
+#define BUTTON1_PIN 8
+#define BUTTON2_PIN 9
+#define BUTTON3_PIN 10
+
 HX711 weight1;
 HX711 weight2;
 
@@ -28,6 +32,10 @@ void setup() {
   weight2.begin(WEIGHT2_DATA_PIN, WEIGHT2_CLOCK_PIN);
 
   display.setBrightness(3);
+
+  setupButton(BUTTON1_PIN);
+  setupButton(BUTTON2_PIN);
+  setupButton(BUTTON3_PIN);
 }
 
 void loop() {
@@ -35,14 +43,31 @@ void loop() {
   readWeightIfReady(weight2, "w2");
 
   updateDisplay();
+  
+  readButton(BUTTON1_PIN, "b1");
+  readButton(BUTTON2_PIN, "b2");
+  readButton(BUTTON3_PIN, "b3");
 }
 
-void readWeightIfReady(HX711 weight, const char* name) {
+void readWeightIfReady(HX711 weight, const char* tag) {
   if (!weight.is_ready()) return;
 
-  Serial.print(name);
+  Serial.print(tag);
   Serial.print(":");
   Serial.print(weight.read());
+  Serial.print(";");
+}
+
+void setupButton(char pin) {
+  pinMode(pin, INPUT_PULLUP);
+}
+  
+void readButton(char pin, const char* tag) {
+  bool pressed = digitalRead(pin) == LOW;
+  
+  Serial.print(tag);
+  Serial.print(":");
+  Serial.print(pressed ? 1 : 0);
   Serial.print(";");
 }
 
