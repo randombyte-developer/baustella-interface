@@ -3,6 +3,7 @@
 ## Arduino libraries
 - https://github.com/bogde/HX711
 - https://github.com/avishorp/TM1637
+- https://github.com/milesburton/Arduino-Temperature-Control-Library
 
 ## Serial protocol
 The Arduino Nano and Raspberry Zero communicate in both directions over a serial port via USB.
