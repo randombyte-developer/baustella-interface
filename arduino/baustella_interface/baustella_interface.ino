@@ -28,7 +28,7 @@ DallasTemperature sensors(&oneWire);
 
 TM1637Display display(DISPLAY_CLOCK_PIN, DISPLAY_DATA_PIN);
 
-#define DISPLAY_TAG "d1:"
+#define DISPLAY_TAG "d0:"
 #define DISPLAY_TAG_LENGTH 3
 #define DISPLAY_TEXT_LENGTH 4
 #define DISPLAY_DATA_LENGTH (DISPLAY_TAG_LENGTH + DISPLAY_TEXT_LENGTH)
@@ -52,14 +52,14 @@ void setup() {
 }
 
 void loop() {
-  readScaleIfReady(scale1, "s1");
-  readScaleIfReady(scale2, "s2");
+  readScaleIfReady(scale1, "s0");
+  readScaleIfReady(scale2, "s1");
 
   updateDisplay();
 
-  readButton(BUTTON1_PIN, "b1");
-  readButton(BUTTON2_PIN, "b2");
-  readButton(BUTTON3_PIN, "b3");
+  readButton(BUTTON1_PIN, "b0");
+  readButton(BUTTON2_PIN, "b1");
+  readButton(BUTTON3_PIN, "b2");
 
   readTemperatures();
 }

@@ -1,34 +1,34 @@
 import { DataProvider } from "./data-provider";
 
-export enum State { NotPressed, Pressed };
+export enum ButtonState { NotPressed, Pressed };
 
 export class Button extends DataProvider {
 
-    private lastState = State.NotPressed;
+    private lastState = ButtonState.NotPressed;
 
     constructor(number: number, private onPressed: () => void) {
         super();
 
-        this.tag = "b" + number;
+        this.tag = `b${number}`;
     }
 
-    override onNewData(data: string) {
+    onNewData(data: string) {
         if (data.length != 1) return;
 
         switch (data) {
             case "0":
-                this.lastState = State.NotPressed;
+                this.lastState = ButtonState.NotPressed;
                 break;
 
             case "1":
-                if (this.lastState == State.NotPressed) {
+                if (this.lastState == ButtonState.NotPressed) {
                     this.onPressed();
                 }
-                this.lastState = State.Pressed;
+                this.lastState = ButtonState.Pressed;
                 break;
 
             default:
-                console.log("Warning: Invalid button state: " + data);
+                console.log("Invalid button state: " + data);
                 break;
         }
     }
