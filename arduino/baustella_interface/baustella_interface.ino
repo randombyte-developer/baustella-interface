@@ -3,11 +3,11 @@
 #include <DallasTemperature.h>
 #include <OneWire.h>
 
-#define WEIGHT1_DATA_PIN 2
-#define WEIGHT1_CLOCK_PIN 3
+#define SCALE1_DATA_PIN 2
+#define SCALE1_CLOCK_PIN 3
 
-#define WEIGHT2_DATA_PIN 4
-#define WEIGHT2_CLOCK_PIN 5
+#define SCALE2_DATA_PIN 4
+#define SCALE2_CLOCK_PIN 5
 
 #define DISPLAY_DATA_PIN 6
 #define DISPLAY_CLOCK_PIN 7
@@ -20,8 +20,8 @@
 
 #define MAX_TEMPERATURE_SENSORS 1
 
-HX711 weight1;
-HX711 weight2;
+HX711 scale1;
+HX711 scale2;
 
 OneWire oneWire(ONE_WIRE_BUS_PIN);
 DallasTemperature sensors(&oneWire);
@@ -37,8 +37,8 @@ void setup() {
   Serial.begin(9600);
   Serial.setTimeout(100);
   
-  weight1.begin(WEIGHT1_DATA_PIN, WEIGHT1_CLOCK_PIN);
-  weight2.begin(WEIGHT2_DATA_PIN, WEIGHT2_CLOCK_PIN);
+  scale1.begin(SCALE1_DATA_PIN, SCALE1_CLOCK_PIN);
+  scale2.begin(SCALE2_DATA_PIN, SCALE2_CLOCK_PIN);
 
   display.setBrightness(3);
 
@@ -52,8 +52,8 @@ void setup() {
 }
 
 void loop() {
-  readWeightIfReady(weight1, "w1");
-  readWeightIfReady(weight2, "w2");
+  readScaleIfReady(scale1, "s1");
+  readScaleIfReady(scale2, "s2");
 
   updateDisplay();
 
@@ -64,12 +64,12 @@ void loop() {
   readTemperatures();
 }
 
-void readWeightIfReady(HX711 weight, const char* tag) {
-  if (!weight.is_ready()) return;
+void readScaleIfReady(HX711 scale, const char* tag) {
+  if (!scale.is_ready()) return;
 
   Serial.print(tag);
   Serial.print(":");
-  Serial.print(weight.read());
+  Serial.print(scale.read());
   Serial.print(";");
 }
 
